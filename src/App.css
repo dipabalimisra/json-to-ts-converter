@@ -1,38 +1,353 @@
-.App {
+/* ── Reset & base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-page: #0d0f12;
+  --bg-panel: #13161b;
+  --bg-header: #0d0f12;
+  --bg-input: #0a0c0f;
+  --border: #252830;
+  --border-focus: #3d8af7;
+  --accent: #3d8af7;
+  --accent-dim: #1c3a6e;
+  --text-primary: #e2e6f0;
+  --text-secondary: #6b7280;
+  --text-muted: #3d4352;
+  --green: #34d399;
+  --red: #f87171;
+  --amber: #fbbf24;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── App shell ── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+/* ── Root name field ── */
+.root-name-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.root-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.root-input {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 10px;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.root-input:focus {
+  border-color: var(--border-focus);
+}
+
+/* ── Main panels ── */
+.panels {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  gap: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: var(--bg-panel);
+}
+
+.panel-left {
+  border-right: 1px solid var(--border);
+}
+
+.panel-right {
+  border-left: 1px solid var(--border);
+}
+
+/* ── Panel header ── */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.panel-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Buttons ── */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 4px 10px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-ghost:hover {
+  border-color: #3d4352;
+  color: var(--text-primary);
+}
+
+.btn-copy {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 14px;
+  transition: background 0.15s, color 0.15s;
+  min-width: 72px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.btn-copy:hover:not(.disabled) {
+  background: var(--accent);
+  color: #fff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.btn-copy.copied {
+  background: #064e3b;
+  border-color: var(--green);
+  color: var(--green);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.btn-copy.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Editor ── */
+.editor {
+  flex: 1;
+  overflow: auto;
+  resize: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 16px 20px;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: none;
+  outline: none;
+  tab-size: 2;
+}
+
+.input-editor {
+  caret-color: var(--accent);
+}
+
+.input-editor::placeholder {
+  color: var(--text-muted);
+}
+
+.output-editor {
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  cursor: default;
+  user-select: text;
+}
+
+.output-placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Panel footer / status ── */
+.panel-footer {
+  padding: 8px 16px;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.status-ok {
+  font-size: 12px;
+  color: var(--green);
+}
+
+.status-error {
+  font-size: 12px;
+  color: var(--red);
+}
+
+.status-idle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Divider arrow ── */
+.divider {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 40px;
+  flex-shrink: 0;
+  background: var(--bg-page);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 
-.App-link {
-  color: #61dafb;
+.arrow {
+  font-size: 18px;
+  color: var(--text-muted);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* ── Scrollbar styling ── */
+.editor::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.editor::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.editor::-webkit-scrollbar-thumb:hover {
+  background: #3d4352;
+}
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .panels {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  .divider {
+    width: 100%;
+    height: 36px;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+  }
+
+  .panel-left {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-right {
+    border-left: none;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .root-name-field {
+    width: 100%;
+  }
+
+  .root-input {
+    flex: 1;
   }
 }

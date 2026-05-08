@@ -1,46 +1,197 @@
-# Getting Started with Create React App
+# JSON → TypeScript Types Converter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Paste any JSON object or array — get clean, typed TypeScript interfaces instantly. Live conversion as you type.
 
-## Available Scripts
+![Demo](./demo.gif)
 
-In the project directory, you can run:
+<!-- Replace demo.gif with your own screen recording or screenshot -->
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## What It Does
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Converts raw JSON (from API responses, mock data, logs, etc.) into ready-to-use TypeScript `interface` declarations — instantly, in the browser, with no backend.
 
-### `npm test`
+Handles nested objects, arrays of objects, `null` values, mixed arrays, and quoted keys automatically.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Why I Built It
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Every time I got a new API response payload, I ended up manually writing TypeScript interfaces for it — copy the key, figure out the type, repeat 20 times. This tool eliminates that entirely. Paste once, copy the generated types, move on.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech Stack
 
-### `npm run eject`
+| Layer     | Tech                                    |
+| --------- | --------------------------------------- |
+| Framework | React 18 (TypeScript template)          |
+| Language  | TypeScript                              |
+| Styling   | Vanilla CSS (dark theme, no UI library) |
+| Clipboard | Native Web Clipboard API                |
+| Build     | Create React App                        |
+| Deploy    | GitHub Pages (`gh-pages`)               |
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+No external UI libraries. No backend. Runs entirely in the browser.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Features
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- **Live conversion** — updates as you type (150ms debounce)
+- **Nested interfaces** — deeply nested objects get their own named interfaces
+- **Array support** — typed arrays (`string[]`, `User[]`) and mixed arrays (`unknown[]`)
+- **Null handling** — `null` values typed as `null` (not `any`)
+- **Custom root name** — configure the top-level interface name
+- **Copy to clipboard** — one-click copy with visual feedback
+- **Clear button** — wipe input cleanly
+- **Error messages** — graceful invalid-JSON feedback, no crashes
+- **Mobile-responsive** — panels stack vertically on small screens
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## How to Run
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Prerequisites
+
+- Node.js v16+ and npm
+
+### Steps
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/YOUR_USERNAME/json-to-ts-converter.git
+cd json-to-ts-converter
+
+# 2. Install dependencies
+npm install
+
+# 3. Start dev server
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+> Requires `homepage` set in `package.json` — see [Setup for Deploy](#setup-for-deploy) below.
+
+---
+
+## Setup for Deploy
+
+Add the following to your `package.json`:
+
+```json
+{
+  "homepage": "https://YOUR_USERNAME.github.io/json-to-ts-converter",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  }
+}
+```
+
+Then install `gh-pages`:
+
+```bash
+npm install --save-dev gh-pages
+```
+
+Run `npm run deploy` — your app will be live at the homepage URL.
+
+---
+
+## Project Structure
+
+```
+json-to-ts-converter/
+├── public/
+│   └── index.html
+├── src/
+│   ├── utils/
+│   │   └── jsonToTs.ts      ← core conversion logic (no React, pure TS)
+│   ├── App.tsx              ← two-panel UI
+│   ├── App.css              ← dark theme styles
+│   └── index.tsx
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+---
+
+## Edge Cases Handled
+
+| Input                        | Output                               |
+| ---------------------------- | ------------------------------------ |
+| `{ "val": null }`            | `val: null`                          |
+| `[{ "id": 1 }, { "id": 2 }]` | `type RootObject = RootObjectItem[]` |
+| `[1, "hello", true]`         | `unknown[]`                          |
+| `{}`                         | Empty interface                      |
+| `"just a string"`            | `type RootObject = string`           |
+| Invalid JSON                 | Error message in status bar          |
+
+---
+
+## AI Tools Used
+
+- **Claude (claude.ai)** — primary code generation, debugging, README
+- **GitHub Copilot** — inline suggestions during edits
+
+---
+
+## What AI Got Right
+
+1. **Recursive conversion logic** — the `inferType` / `inferObjectType` recursion was clean and correct on the first generation, handling arbitrary nesting depth without issues.
+2. **React hooks pattern** — the `useEffect` with a debounce timer and cleanup (`clearTimeout`) was idiomatic and correct out of the box.
+3. **CSS dark theme layout** — the two-panel flex layout with header, scrollable editor, and sticky footer was generated correctly and required almost no tweaking.
+
+---
+
+## What I Had to Fix
+
+1. **Null typing** — AI initially typed `null` JSON values as `any`. I caught this during manual edge-case testing and prompted a targeted fix to use `null` as the explicit TypeScript type. The fix required one follow-up prompt.
+
+2. **Interface ordering** — The first version put nested interfaces _after_ the root interface, which means TypeScript's `interface` hoisting doesn't matter, but it still looked backwards when reading the output. I revised the logic to always put the root interface at the top and nested interfaces below it.
+
+3. **Array of objects typing** — When a JSON array contained objects (e.g. `[{ "id": 1 }]`), the first version typed it as `object[]` instead of generating a named interface (`RootObjectItem[]`). I had to iterate on the prompt twice and ultimately write the `inferArrayType` function myself to get named interface generation for arrays of objects.
+
+---
+
+## What I Learned About Vibe Coding
+
+- **A detailed initial prompt saves a lot of back-and-forth.** Specifying the file structure, stack, and edge cases upfront reduced clarification rounds significantly.
+- **AI is strong on recursive patterns but weak on edge case coverage.** The happy path was generated well. The 3–4 edge cases (null, mixed arrays, array-of-objects) all needed follow-up prompting or manual fixes.
+- **You have to test with ugly JSON, not just clean examples.** AI test cases tend to be optimistic. Throwing real-world messy JSON at the tool immediately revealed the array-of-objects bug.
+- **Breaking work into small focused prompts beats one giant prompt.** Each feature addition (copy button, root name input, error handling) was a separate prompt — cleaner results each time.
+- **Reading every line before committing is non-negotiable.** Two bugs would have shipped silently if I hadn't traced through the conversion logic manually.
+
+---
+
+## Screenshots / Demo
+
+_Add a screenshot or GIF here. A 30-second screen recording showing paste → conversion → copy is ideal._
+
+---
+
+## Live Demo
+
+[https://YOUR_USERNAME.github.io/json-to-ts-converter](https://YOUR_USERNAME.github.io/json-to-ts-converter)
+
+---
+
+## License
+
+MIT
