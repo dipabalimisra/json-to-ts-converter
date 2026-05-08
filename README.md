@@ -61,7 +61,7 @@ No external UI libraries. No backend. Runs entirely in the browser.
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/json-to-ts-converter.git
+git clone https://github.com/dipabalimisra/json-to-ts-converter.git
 cd json-to-ts-converter
 
 # 2. Install dependencies
@@ -170,25 +170,18 @@ json-to-ts-converter/
 
 ---
 
-## What I Learned About Vibe Coding
-
-- **A detailed initial prompt saves a lot of back-and-forth.** Specifying the file structure, stack, and edge cases upfront reduced clarification rounds significantly.
-- **AI is strong on recursive patterns but weak on edge case coverage.** The happy path was generated well. The 3–4 edge cases (null, mixed arrays, array-of-objects) all needed follow-up prompting or manual fixes.
-- **You have to test with ugly JSON, not just clean examples.** AI test cases tend to be optimistic. Throwing real-world messy JSON at the tool immediately revealed the array-of-objects bug.
-- **Breaking work into small focused prompts beats one giant prompt.** Each feature addition (copy button, root name input, error handling) was a separate prompt — cleaner results each time.
-- **Reading every line before committing is non-negotiable.** Two bugs would have shipped silently if I hadn't traced through the conversion logic manually.
-
 ---
 
 ## Screenshots / Demo
 
-_Add a screenshot or GIF here. A 30-second screen recording showing paste → conversion → copy is ideal._
+<img width="1358" height="388" alt="image" src="https://github.com/user-attachments/assets/db8474b9-b974-4131-b6b0-ad5f1123ad51" />
+
 
 ---
 
 ## Live Demo
 
-[https://YOUR_USERNAME.github.io/json-to-ts-converter](https://YOUR_USERNAME.github.io/json-to-ts-converter)
+[https://dipabalimisra.github.io/json-to-ts-converter](https://dipabalimisra.github.io/json-to-ts-converter)
 
 ---
 
